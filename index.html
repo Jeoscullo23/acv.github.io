@@ -1,257 +1,549 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para mi novia ❤️</title>
+    <title>Un mensajito especial...</title>
     <style>
-        body {
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600&display=swap');
+
+        body,
+        html {
             margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            background-color: #ffe6f2;
-            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffe6eb;
         }
+
         .screen {
             display: none;
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            position: relative;
+            text-align: center;
             z-index: 10;
         }
-        .active {
+
+        .screen.active {
             display: flex;
         }
-        .btn {
-            padding: 15px 30px;
-            font-size: 20px;
-            margin: 15px;
-            cursor: pointer;
-            border: none;
-            border-radius: 25px;
-            background-color: #ff4d94;
-            color: white;
-            font-weight: bold;
-            transition: 0.2s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            font-size: 2.2rem;
+            text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
+            margin-bottom: 2rem;
+            padding: 0 20px;
             z-index: 20;
+            position: relative;
         }
-        .btn:hover {
-            background-color: #ff1a75;
-            transform: scale(1.05);
+
+        .botones-container {
+            display: flex;
+            gap: 20px;
+            z-index: 30;
         }
-        /* Estilos de títulos regulares */
-        .title {
-            font-size: 28px;
-            color: #cc0052;
-            margin-bottom: 20px;
-            padding: 0 20px;
+
+        .btn-siguiente {
+            padding: 15px 40px;
+            font-size: 1.2rem;
             font-weight: bold;
+            color: #fff;
+            background: linear-gradient(45deg, #ff4b72, #ff7e5f);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 75, 114, 0.5);
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+            z-index: 30;
+            user-select: none;
         }
-        /* NUEVO: Estilo para celular, muy fácil de leer */
-        .title-final {
-            font-size: 32px;
-            color: #ffffff; /* Letra blanca sólida */
-            margin-bottom: 20px;
-            padding: 0 20px;
-            font-weight: 900;
-            /* Borde fucsia oscuro alrededor de la letra para que resalte perfecto */
-            text-shadow: 
-                2px 2px 0px #b30047, 
-                -2px -2px 0px #b30047, 
-                2px -2px 0px #b30047, 
-                -2px 2px 0px #b30047, 
-                0px 6px 10px rgba(0,0,0,0.4);
+
+        .btn-siguiente:hover {
+            filter: brightness(1.1);
         }
-        .photo {
-            width: 85%;
-            max-width: 320px;
-            border-radius: 15px;
-            border: 6px solid #ff4d94;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            margin-top: 10px;
+
+        .btn-siguiente:active {
+            transform: scale(0.95);
         }
-        /* Modal Error */
+
+        /* Modal de Error */
         .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 100;
             justify-content: center;
             align-items: center;
-            z-index: 100;
         }
+
+        .modal.active {
+            display: flex;
+        }
+
         .modal-content {
-            background: white;
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            width: 80%;
-            max-width: 300px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            animation: popIn 0.3s ease-out;
+            border: 2px solid #ff4b72;
         }
+
+        .modal-content h2 {
+            font-family: 'Fredoka One', cursive;
+            color: #ff4b72;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
         .modal-content p {
-            font-size: 22px;
-            color: #cc0052;
-            font-weight: bold;
+            font-size: 1.2rem;
+            color: #555;
             margin-bottom: 20px;
         }
-        /* Corazones flotantes */
+
+        /* Fondos Animados */
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        #screen0 {
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #ffb199, #ff0844);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            overflow: hidden;
+        }
+
+        #screen1 {
+            background: linear-gradient(-45deg, #a18cd1, #fbc2eb, #fad0c4, #ffd1ff);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
+        }
+
+        #screen2 {
+            background: linear-gradient(-45deg, #ff758c, #ff7eb3, #a2c2e6, #c5a8de);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
+        }
+
+        #screen3 {
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+        }
+
+        #screen4 {
+            background: radial-gradient(circle, #520000 0%, #0a0000 100%);
+            color: white;
+        }
+
+        #screen4 h1 {
+            color: #ff4444;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Texto resaltado final (Legible) */
+        .highlight-text {
+            color: #ff4b72;
+            font-size: 3rem;
+            display: block;
+            margin-top: 15px;
+            text-shadow: 2px 2px 0px #fff;
+            /* Sombra blanca sutil para contraste */
+        }
+
+        /* Lluvia de corazones (Pantalla 0) */
+        .rain-heart {
+            position: absolute;
+            top: -50px;
+            color: #ff0844;
+            font-size: 24px;
+            z-index: 5;
+            animation: rainDown linear infinite;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        @keyframes rainDown {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Corazones animados que flotan arriba (Global) */
         .heart {
             position: absolute;
-            color: #ff3385;
-            font-size: 24px;
-            animation: floatUp 5s linear infinite;
+            bottom: -100px;
+            width: 30px;
+            height: 30px;
+            background-color: #ff4b72;
+            transform: rotate(-45deg);
+            animation: floatUp 6s infinite ease-in;
             opacity: 0.6;
             z-index: 1;
+            filter: drop-shadow(0 0 5px rgba(255, 75, 114, 0.5));
         }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
-        /* Mundo 3D (CSS) */
-        .world-container {
-            width: 180px;
-            height: 180px;
+
+        .heart::before,
+        .heart::after {
+            content: '';
             position: absolute;
-            z-index: 5;
-            opacity: 0.3;
-            top: 15%;
-        }
-        .world {
-            width: 100%;
-            height: 100%;
+            width: 30px;
+            height: 30px;
+            background-color: #ff4b72;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #4da6ff, #0059b3);
-            position: relative;
-            overflow: hidden;
-            box-shadow: inset -15px -15px 20px rgba(0,0,0,0.5), 0 0 20px rgba(77, 166, 255, 0.4);
-            animation: spinWorld 8s linear infinite;
         }
+
+        .heart::before {
+            top: -15px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 15px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.5) rotate(-45deg);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(1.2) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Princesa 3D */
+        .princess-3d {
+            position: absolute;
+            font-size: 10rem;
+            z-index: 5;
+            animation: spin3D 4s linear infinite;
+            transform-style: preserve-3d;
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        @keyframes spin3D {
+            0% {
+                transform: perspective(800px) rotateY(0deg);
+            }
+
+            100% {
+                transform: perspective(800px) rotateY(360deg);
+            }
+        }
+
+        /* Mundo CSS 3D */
+        .css-globe {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: #4facfe;
+            box-shadow: inset -25px -25px 40px rgba(0, 0, 0, 0.5), inset 10px 10px 20px rgba(255, 255, 255, 0.4), 0 15px 35px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .continents {
+            width: 500px;
+            height: 100%;
+            position: absolute;
+            animation: spinGlobe 8s linear infinite;
+        }
+
         .continent {
             position: absolute;
-            background: #33cc33;
-            opacity: 0.85;
+            background: #2ecc71;
+            opacity: 0.9;
         }
-        .c1 { width: 80px; height: 60px; top: 30px; left: 20px; border-radius: 40% 60% 50% 40%; }
-        .c2 { width: 100px; height: 50px; bottom: 30px; right: 10px; border-radius: 50% 30% 60% 40%; }
-        @keyframes spinWorld {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .c1 {
+            width: 90px;
+            height: 70px;
+            top: 40px;
+            left: 20px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+
+        .c2 {
+            width: 120px;
+            height: 90px;
+            top: 120px;
+            left: 130px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .c3 {
+            width: 70px;
+            height: 80px;
+            top: 50px;
+            left: 210px;
+            border-radius: 50% 50% 30% 70% / 50% 40% 60% 50%;
+        }
+
+        .c1-copy {
+            width: 90px;
+            height: 70px;
+            top: 40px;
+            left: 270px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+
+        .c2-copy {
+            width: 120px;
+            height: 90px;
+            top: 120px;
+            left: 380px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .c3-copy {
+            width: 70px;
+            height: 80px;
+            top: 50px;
+            left: 460px;
+            border-radius: 50% 50% 30% 70% / 50% 40% 60% 50%;
+        }
+
+        @keyframes spinGlobe {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-250px);
+            }
+        }
+
+        /* Foto final */
+        .funny-image {
+            max-width: 90%;
+            max-height: 45vh;
+            border: 8px solid white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            transform: rotate(-2deg);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
+            margin-top: 20px;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.1) rotate(-10deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(-2deg);
+                opacity: 1;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <!-- Modal de Error -->
-    <div id="errorModal" class="modal">
+    <!-- Contenedor de corazones de fondo para todo el juego -->
+    <div id="hearts-container"></div>
+
+    <!-- MODAL DE ERROR (Se muestra si elige YO) -->
+    <div id="modal-error" class="modal">
         <div class="modal-content">
-            <p>¡Incorrecto! Vuelve a intentar 😒</p>
-            <button class="btn" onclick="closeModal()">Reintentar</button>
+            <h2>¡Respuesta Incorrecta! 🤨</h2>
+            <p>Esa no es la respuesta correcta... piénsalo bien.</p>
+            <button id="btn-cerrar-modal" class="btn-siguiente">Intentar de nuevo</button>
         </div>
     </div>
 
-    <!-- PANTALLA 1: Login -->
-    <div id="screen1" class="screen active">
-        <div class="title">¿QUIEN ES EL MAS LINDO BONITO HERMOSO DE LA RELACION?</div>
-        <button class="btn" onclick="checkLogin('TU')">TÚ</button>
-        <button class="btn" onclick="checkLogin('YO')">YO</button>
+    <!-- PANTALLA 0: LOGIN -->
+    <div id="screen0" class="screen active">
+        <!-- Contenedor específico para la lluvia de corazones -->
+        <div id="rain-container"></div>
+
+        <h1>¿QUIÉN ES EL MÁS LINDO, BONITO Y HERMOSO DE LA RELACIÓN?</h1>
+        <div class="botones-container">
+            <button id="btn-yo" class="btn-siguiente">YO</button>
+            <button id="btn-tu" class="btn-siguiente">TÚ</button>
+        </div>
     </div>
 
-    <!-- PANTALLA 2: Mensaje de Éxito -->
+    <!-- PANTALLA 1: MENSAJE DE ÉXITO -->
+    <div id="screen1" class="screen">
+        <h1>¡Correctoooooo!<br>Tu novio es el más hermoso.<br>¡Qué suerte que tuviste! 🥰</h1>
+        <button id="btn-continuar" class="btn-siguiente">Sigue con la siguiente pregunta</button>
+    </div>
+
+    <!-- PANTALLA 2: BROMA 1 -->
     <div id="screen2" class="screen">
-        <div class="title">¡Correctoooooo! Tu novio es el más hermoso. ¡Qué suerte que tuviste! 🥰</div>
-        <button class="btn" onclick="nextScreen(2, 3)">Siguiente Pregunta</button>
+        <!-- Princesa en 3D girando en el fondo -->
+        <div class="princess-3d">👸</div>
+
+        <h1>¿Eres la más hermosa?</h1>
+        <button id="btn-broma1" class="btn-siguiente">Siguiente 💖</button>
     </div>
 
-    <!-- PANTALLA 3: Primera pregunta que se mueve -->
+    <!-- PANTALLA 3: BROMA 2 CON MUNDO -->
     <div id="screen3" class="screen">
-        <div class="title">Si eres la más hermosa da al botón siguiente...</div>
-        <button id="btnMove1" class="btn" onclick="moveButton('btnMove1', 3)">Siguiente</button>
-    </div>
-
-    <!-- PANTALLA 4: Segunda pregunta que se mueve (con mundo) -->
-    <div id="screen4" class="screen">
-        <div class="world-container">
-            <div class="world">
+        <div class="css-globe">
+            <div class="continents">
                 <div class="continent c1"></div>
                 <div class="continent c2"></div>
+                <div class="continent c3"></div>
+                <div class="continent c1-copy"></div>
+                <div class="continent c2-copy"></div>
+                <div class="continent c3-copy"></div>
             </div>
         </div>
-        <div class="title">¿Eres la mejor novia del mundo mundial?</div>
-        <button id="btnMove2" class="btn" onclick="moveButton('btnMove2', 4)">Siguiente</button>
+        <h1 style="text-shadow: 0 0 10px rgba(255,255,255,0.5);">Eres la mejor novia del mundo mundial</h1>
+        <button id="btn-broma2" class="btn-siguiente">Siguiente 🌎</button>
     </div>
 
-    <!-- PANTALLA 5: Final con Foto -->
-    <div id="screen5" class="screen">
-        <div class="title-final">Incorrecto !!! tu eres la novia mas feita</div>
-        <img src="image_7550bc.jpg" alt="Foto" class="photo">
+    <!-- PANTALLA 4: FINAL CHISTOSO -->
+    <div id="screen4" class="screen">
+        <!-- Letras con un estilo legible y llamativo en lugar del neón -->
+        <h1>¡Incorrecto!!!<br><span class="highlight-text">tú eres la más feita</span></h1>
+        <img src="image_7550bc.jpg" alt="Foto chistosa" class="funny-image">
     </div>
 
     <script>
-        // Crear corazones de fondo
-        for(let i = 0; i < 20; i++){
-            let h = document.createElement('div');
-            h.innerHTML = '❤️';
-            h.className = 'heart';
-            h.style.left = Math.random() * 100 + 'vw';
-            h.style.animationDuration = (Math.random() * 4 + 3) + 's';
-            h.style.animationDelay = Math.random() * 3 + 's';
-            document.body.appendChild(h);
+        // Generar corazones flotantes globales
+        const heartsContainer = document.getElementById('hearts-container');
+        for (let i = 0; i < 20; i++) {
+            let heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heartsContainer.appendChild(heart);
         }
 
-        let moveCount1 = 0;
-        let moveCount2 = 0;
-        const MAX_MOVES = 3;
-
-        function checkLogin(answer) {
-            if(answer === 'YO') {
-                document.getElementById('errorModal').style.display = 'flex';
-            } else {
-                nextScreen(1, 2);
-            }
+        // Generar la lluvia de corazones en la Pantalla 0
+        const rainContainer = document.getElementById('rain-container');
+        const corazonElegir = ['💖', '❤️', '💕', '💗'];
+        for (let i = 0; i < 30; i++) {
+            let drop = document.createElement('div');
+            drop.classList.add('rain-heart');
+            drop.innerText = corazonElegir[Math.floor(Math.random() * corazonElegir.length)];
+            drop.style.left = Math.random() * 100 + 'vw';
+            drop.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            drop.style.animationDelay = Math.random() * 2 + 's';
+            drop.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            rainContainer.appendChild(drop);
         }
 
-        function closeModal() {
-            document.getElementById('errorModal').style.display = 'none';
+        function goToScreen(currentScreenId, nextScreenId) {
+            document.getElementById(currentScreenId).classList.remove('active');
+            document.getElementById(nextScreenId).classList.add('active');
         }
 
-        function nextScreen(current, next) {
-            document.getElementById('screen' + current).classList.remove('active');
-            document.getElementById('screen' + next).classList.add('active');
-            
-            // Si pasamos a las pantallas con botones que se mueven, resetear la posición
-            if(next === 3 || next === 4) {
-                let btnId = next === 3 ? 'btnMove1' : 'btnMove2';
-                document.getElementById(btnId).style.transform = `translate(0px, 0px)`;
-            }
+        const btnYo = document.getElementById('btn-yo');
+        const btnTu = document.getElementById('btn-tu');
+        const modalError = document.getElementById('modal-error');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+
+        btnYo.addEventListener('click', () => {
+            modalError.classList.add('active');
+        });
+
+        btnCerrarModal.addEventListener('click', () => {
+            modalError.classList.remove('active');
+        });
+
+        btnTu.addEventListener('click', () => {
+            goToScreen('screen0', 'screen1');
+        });
+
+        const btnContinuar = document.getElementById('btn-continuar');
+        btnContinuar.addEventListener('click', () => {
+            goToScreen('screen1', 'screen2');
+        });
+
+        function setupTrickyButton(buttonId, currentScreenId, nextScreenId) {
+            const btn = document.getElementById(buttonId);
+            let moveCount = 0;
+
+            const evasiveAction = (e) => {
+                if (moveCount < 3) {
+                    e.preventDefault();
+
+                    const btnRect = btn.getBoundingClientRect();
+                    const maxX = window.innerWidth - btnRect.width - 20;
+                    const maxY = window.innerHeight - btnRect.height - 20;
+
+                    const newX = Math.max(20, Math.floor(Math.random() * maxX));
+                    const newY = Math.max(20, Math.floor(Math.random() * maxY));
+
+                    btn.style.position = 'absolute';
+                    btn.style.left = newX + 'px';
+                    btn.style.top = newY + 'px';
+
+                    moveCount++;
+                }
+            };
+
+            btn.addEventListener('mouseenter', evasiveAction);
+            btn.addEventListener('touchstart', evasiveAction, { passive: false });
+
+            btn.addEventListener('click', (e) => {
+                if (moveCount >= 3) {
+                    btn.style.position = 'relative';
+                    btn.style.left = 'auto';
+                    btn.style.top = 'auto';
+
+                    goToScreen(currentScreenId, nextScreenId);
+                } else {
+                    evasiveAction(e);
+                }
+            });
         }
 
-        function moveButton(btnId, screenNum) {
-            let currentCount = screenNum === 3 ? moveCount1 : moveCount2;
-            
-            if (currentCount < MAX_MOVES) {
-                let btn = document.getElementById(btnId);
-                // Calcular espacio disponible en pantalla para que no se salga
-                let maxX = window.innerWidth / 2 - 80;
-                let maxY = window.innerHeight / 2 - 50;
-                
-                let randomX = (Math.random() * maxX * 2) - maxX;
-                let randomY = (Math.random() * maxY * 2) - maxY;
-                
-                btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
-                
-                if (screenNum === 3) moveCount1++;
-                else moveCount2++;
-            } else {
-                nextScreen(screenNum, screenNum + 1);
-            }
-        }
+        setupTrickyButton('btn-broma1', 'screen2', 'screen3');
+        setupTrickyButton('btn-broma2', 'screen3', 'screen4');
+
     </script>
 </body>
+
 </html>
