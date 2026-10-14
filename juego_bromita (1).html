@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un mensajito especial...</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Poppins:wght@400;600&display=swap');
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffe6eb;
+        }
+
+        .screen {
+            display: none;
+            /* Oculta todas las pantallas por defecto */
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 10;
+        }
+
+        /* La clase active muestra la pantalla */
+        .screen.active {
+            display: flex;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            font-size: 2.2rem;
+            text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 2rem;
+            padding: 0 20px;
+            z-index: 20;
+        }
+
+        .botones-container {
+            display: flex;
+            gap: 20px;
+            z-index: 30;
+        }
+
+        .btn-siguiente {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(45deg, #ff4b72, #ff7e5f);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 75, 114, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            z-index: 30;
+            user-select: none;
+        }
+
+        .btn-siguiente:active {
+            transform: scale(0.95);
+        }
+
+        .btn-error {
+            background: linear-gradient(45deg, #a8a8a8, #7a7a7a);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modal de Error */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            animation: popIn 0.3s ease-out;
+        }
+
+        .modal-content h2 {
+            font-family: 'Fredoka One', cursive;
+            color: #ff4b72;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        .modal-content p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        /* Estilos de pantallas y fondos */
+        #screen0 {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        #screen1 {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a18cd1 100%);
+        }
+
+        #screen2 {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+        }
+
+        #screen3 {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+        }
+
+        #screen4 {
+            background: radial-gradient(circle, #333 0%, #000 100%);
+            color: white;
+        }
+
+        #screen4 h1 {
+            color: #ff4444;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px #ff4444, 0 0 20px #ff0000;
+        }
+
+        /* Corazones animados */
+        .heart {
+            position: absolute;
+            bottom: -100px;
+            width: 30px;
+            height: 30px;
+            background-color: #ff4b72;
+            transform: rotate(-45deg);
+            animation: floatUp 6s infinite ease-in;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ff4b72;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -15px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 15px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.5) rotate(-45deg);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(1.2) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mundo CSS 3D */
+        .css-globe {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: #4facfe;
+            box-shadow: inset -25px -25px 40px rgba(0, 0, 0, 0.5), inset 10px 10px 20px rgba(255, 255, 255, 0.4), 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .continents {
+            width: 500px;
+            height: 100%;
+            position: absolute;
+            animation: spinGlobe 8s linear infinite;
+        }
+
+        .continent {
+            position: absolute;
+            background: #2ecc71;
+            opacity: 0.9;
+        }
+
+        .c1 {
+            width: 90px;
+            height: 70px;
+            top: 40px;
+            left: 20px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+
+        .c2 {
+            width: 120px;
+            height: 90px;
+            top: 120px;
+            left: 130px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .c3 {
+            width: 70px;
+            height: 80px;
+            top: 50px;
+            left: 210px;
+            border-radius: 50% 50% 30% 70% / 50% 40% 60% 50%;
+        }
+
+        .c1-copy {
+            width: 90px;
+            height: 70px;
+            top: 40px;
+            left: 270px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+
+        .c2-copy {
+            width: 120px;
+            height: 90px;
+            top: 120px;
+            left: 380px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+
+        .c3-copy {
+            width: 70px;
+            height: 80px;
+            top: 50px;
+            left: 460px;
+            border-radius: 50% 50% 30% 70% / 50% 40% 60% 50%;
+        }
+
+        @keyframes spinGlobe {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-250px);
+            }
+        }
+
+        /* Foto final */
+        .funny-image {
+            max-width: 90%;
+            max-height: 50vh;
+            border: 10px solid white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transform: rotate(-2deg);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.1) rotate(-10deg);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1) rotate(-2deg);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Contenedor de corazones de fondo para todo el juego -->
+    <div id="hearts-container"></div>
+
+    <!-- MODAL DE ERROR (Se muestra si elige YO) -->
+    <div id="modal-error" class="modal">
+        <div class="modal-content">
+            <h2>¡Respuesta Incorrecta! 🤨</h2>
+            <p>Esa no es la respuesta correcta... piénsalo bien.</p>
+            <button id="btn-cerrar-modal" class="btn-siguiente">Intentar de nuevo</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 0: LOGIN -->
+    <div id="screen0" class="screen active">
+        <h1>¿QUIÉN ES EL MÁS LINDO, BONITO Y HERMOSO DE LA RELACIÓN?</h1>
+        <div class="botones-container">
+            <button id="btn-yo" class="btn-siguiente btn-error">YO</button>
+            <button id="btn-tu" class="btn-siguiente">TÚ</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 1: MENSAJE DE ÉXITO -->
+    <div id="screen1" class="screen">
+        <h1>¡Correctoooooo!<br>Tu novio es el más hermoso.<br>¡Qué suerte que tuviste! 🥰</h1>
+        <button id="btn-continuar" class="btn-siguiente">Sigue con la siguiente pregunta</button>
+    </div>
+
+    <!-- PANTALLA 2: BROMA 1 -->
+    <div id="screen2" class="screen">
+        <h1>¿Eres la más hermosa?</h1>
+        <button id="btn-broma1" class="btn-siguiente">Siguiente 💖</button>
+    </div>
+
+    <!-- PANTALLA 3: BROMA 2 CON MUNDO -->
+    <div id="screen3" class="screen">
+        <!-- Mundo 3D -->
+        <div class="css-globe">
+            <div class="continents">
+                <div class="continent c1"></div>
+                <div class="continent c2"></div>
+                <div class="continent c3"></div>
+                <div class="continent c1-copy"></div>
+                <div class="continent c2-copy"></div>
+                <div class="continent c3-copy"></div>
+            </div>
+        </div>
+        <h1>Eres la mejor novia del mundo mundial</h1>
+        <button id="btn-broma2" class="btn-siguiente">Siguiente 🌎</button>
+    </div>
+
+    <!-- PANTALLA 4: FINAL CHISTOSO -->
+    <div id="screen4" class="screen">
+        <h1>¡Incorrecto!!!<br>tú eres la más feita</h1>
+        <img src="image_7550bc.jpg" alt="Foto chistosa" class="funny-image">
+    </div>
+
+    <script>
+        // Generar corazones flotantes
+        const heartsContainer = document.getElementById('hearts-container');
+        for (let i = 0; i < 25; i++) {
+            let heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heartsContainer.appendChild(heart);
+        }
+
+        // Función para cambiar de pantalla
+        function goToScreen(currentScreenId, nextScreenId) {
+            document.getElementById(currentScreenId).classList.remove('active');
+            document.getElementById(nextScreenId).classList.add('active');
+        }
+
+        // === LÓGICA PANTALLA 0 (LOGIN) ===
+        const btnYo = document.getElementById('btn-yo');
+        const btnTu = document.getElementById('btn-tu');
+        const modalError = document.getElementById('modal-error');
+        const btnCerrarModal = document.getElementById('btn-cerrar-modal');
+
+        // Si elige "YO", muestra el modal de error
+        btnYo.addEventListener('click', () => {
+            modalError.classList.add('active');
+        });
+
+        // Cerrar el modal
+        btnCerrarModal.addEventListener('click', () => {
+            modalError.classList.remove('active');
+        });
+
+        // Si elige "TÚ", avanza a la Pantalla 1
+        btnTu.addEventListener('click', () => {
+            goToScreen('screen0', 'screen1');
+        });
+
+
+        // === LÓGICA PANTALLA 1 (ÉXITO) ===
+        const btnContinuar = document.getElementById('btn-continuar');
+        btnContinuar.addEventListener('click', () => {
+            goToScreen('screen1', 'screen2');
+        });
+
+
+        // === LÓGICA DE BOTONES ESCURRIDIZOS (PANTALLAS 2 Y 3) ===
+        function setupTrickyButton(buttonId, currentScreenId, nextScreenId) {
+            const btn = document.getElementById(buttonId);
+            let moveCount = 0;
+
+            const evasiveAction = (e) => {
+                if (moveCount < 3) {
+                    e.preventDefault();
+
+                    const btnRect = btn.getBoundingClientRect();
+                    const maxX = window.innerWidth - btnRect.width - 20;
+                    const maxY = window.innerHeight - btnRect.height - 20;
+
+                    const newX = Math.max(20, Math.floor(Math.random() * maxX));
+                    const newY = Math.max(20, Math.floor(Math.random() * maxY));
+
+                    btn.style.position = 'absolute';
+                    btn.style.left = newX + 'px';
+                    btn.style.top = newY + 'px';
+
+                    moveCount++;
+                }
+            };
+
+            // Intentar evadir al pasar el mouse o tocar en móviles
+            btn.addEventListener('mouseenter', evasiveAction);
+            btn.addEventListener('touchstart', evasiveAction, { passive: false });
+
+            // Si ya se movió 3 veces, permitir el clic para avanzar
+            btn.addEventListener('click', (e) => {
+                if (moveCount >= 3) {
+                    // Reiniciar posición para la próxima vez (opcional)
+                    btn.style.position = 'relative';
+                    btn.style.left = 'auto';
+                    btn.style.top = 'auto';
+
+                    goToScreen(currentScreenId, nextScreenId);
+                } else {
+                    evasiveAction(e);
+                }
+            });
+        }
+
+        // Configurar los botones que huyen
+        setupTrickyButton('btn-broma1', 'screen2', 'screen3');
+        setupTrickyButton('btn-broma2', 'screen3', 'screen4');
+
+    </script>
+</body>
+
+</html>
